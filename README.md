@@ -11,12 +11,12 @@ Promises.
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/forks`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/related`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches/default`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches/default`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/browse`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/changes`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/changes`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/changes`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/comments`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/files`
@@ -28,8 +28,8 @@ Promises.
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/commits`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/diff`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/participants`
-  * [ ] Profile
-    * [ ] `GET /rest/api/1.0/profile/recent/repos`
+  * [x] Profile
+    * [x] `GET /rest/api/1.0/profile/recent/repos`
   * [ ] Users
     * [ ] `GET /rest/api/1.0/users`
     * [ ] `GET /rest/api/1.0/users/{slug}`

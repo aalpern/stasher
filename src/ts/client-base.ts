@@ -1,3 +1,4 @@
+
 /* -----------------------------------------------------------------------------
    Core Client types
    ----------------------------------------------------------------------------- */
@@ -30,7 +31,11 @@ export class PagedResponse<T> {
     this.start = data.start
     this.nextPageStart = data.nextPageStart
     this.isLastPage = data.isLastPage
-    this.values = data.values.map(v => new c(client, v))
+    if (c) {
+      this.values = data.values.map(v => new c(client, v))
+    } else {
+      this.values = data.values
+    }
   }
 
   /**
@@ -40,5 +45,11 @@ export class PagedResponse<T> {
    */
   nextPage() {
     // TODO
+  }
+}
+
+export class DefaultPagedResponse extends PagedResponse<any> {
+  constructor(client: IClient, base_path: string, data: any) {
+    super(null, client, base_path, data)
   }
 }

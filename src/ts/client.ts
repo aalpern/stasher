@@ -9,6 +9,7 @@ import {
 } from './client-base'
 
 import ProjectModel from './core/project'
+import RepositoryModel from './core/repository'
 
 export enum AuthType {
   BASIC,
@@ -16,7 +17,7 @@ export enum AuthType {
   COOKIE
 }
 
-export interface StashAuth {
+export interface Auth {
   type: AuthType
   username?: string
   password?: string
@@ -25,7 +26,7 @@ export interface StashAuth {
 export class Client implements IClient {
 
   private _base_url: any /* URI */
-  private _auth : StashAuth
+  private _auth : Auth
   version: string = '1.0'
 
   constructor(data?: any) {
@@ -57,9 +58,10 @@ export class Client implements IClient {
     __proto__: this,
 
     list(opt?: RequestOptions) {
-      return this.http_get('api', '/projects')
+      let path = '/projects'
+      return this.http_get('api', path)
         .then((data) => {
-          return new PagedResponse<ProjectModel>(ProjectModel, this, '/projects', data)
+          return new PagedResponse<ProjectModel>(ProjectModel, this, path, data)
         })
     },
 
@@ -71,12 +73,35 @@ export class Client implements IClient {
     }
   }
 
+  repositories = {
+    __proto__: this,
+
+    get(project: string, repo: string) {
+      return this.http_get('api', `/projects/${project}/repos/${repo}`)
+        .then((data) => {
+          return new RepositoryModel(this, data)
+        })
+    }
+  }
+
+  profile = {
+    __proto__: this,
+
+    recent_repos() {
+      let path = '/profile/recent/repos'
+      return this.http_get('api', path)
+        .then((data) => {
+          return new PagedResponse<RepositoryModel>(RepositoryModel, this, path, data)
+        })
+    }
+  }
+
   /* --------------------------------------------------
      Internals
      -------------------------------------------------- */
 
-  http_get(api: string, path: string) {
-    return this._request('GET', api, path)
+  http_get(api: string, path: string, options?: any) {
+    return this._request('GET', api, path, options)
   }
 
   _url(api: string, path: string) {
@@ -88,9 +113,13 @@ export class Client implements IClient {
       .normalizePath()
   }
 
-  _request(method: string, api: string, path: string) {
+  _request(method: string, api: string, path: string, options?: any) {
     let url = this._url(api, path)
     console.log(`${method} ${url.toString()}`)
+
+    if (method === 'GET' && options && options.params) {
+      url.setSearch(options.params)
+    }
 
     let headers = {}
 

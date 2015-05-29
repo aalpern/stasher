@@ -3,12 +3,18 @@ import {
 } from './interfaces'
 
 import {
-  IClient, RequestOptions, PagedResponse
+  IClient, RequestOptions, PagedResponse, DefaultPagedResponse
 } from '../client-base'
 
 import EntityModel from './entity'
 import ProjectModel from './project'
 import PullRequestModel from './pull-request'
+import ChangeModel from './change'
+
+export interface ChangesOptions extends RequestOptions {
+  since?: string
+  until: string
+}
 
 export default class RepositoryModel extends EntityModel implements Repository {
   id: number
@@ -35,9 +41,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
       this.state = data.state
       this.statusMessage = data.statusMessage
       this.forkable = data.forkable
-      if (data.project) {
-        this.project = new ProjectModel(data.project)
-      }
+      this.project = new ProjectModel(client, data.project)
       this.link = data.link
       this.links = data.links
     }
@@ -50,18 +54,42 @@ export default class RepositoryModel extends EntityModel implements Repository {
   }
 
   branches(opt?: RequestOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/branches`
+    return this.client.http_get('api', path)
+      .then((data) => {
+        return new DefaultPagedResponse(this.client, path, data)
+      })
   }
 
   default_branch(opt?: RequestOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/branches/default`
+    return this.client.http_get('api', path)
   }
 
-  changes(opt?: RequestOptions) {
+  changes(opt?: ChangesOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/changes`
+    let params = {
+      since: opt ? opt.since : undefined,
+      until: opt ? opt.until : undefined
+    }
+    return this.client.http_get('api', path, {
+      params: params
+    }).then((data) => {
+      return new PagedResponse<ChangeModel>(ChangeModel, this.client, path, data)
+    })
   }
 
   commits(opt?: RequestOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/commits`
+    return this.client.http_get('api', path)
+      .then((data) => {
+        return new DefaultPagedResponse(this.client, path, data)
+      })
   }
 
   commit(id: string, opt?: RequestOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/commits/${id}`
+    return this.client.http_get('api', path)
   }
 
   files(opt?: RequestOptions) {
