@@ -1,10 +1,10 @@
 import {
-  Client, RequestOptions, PagedResponse
-} from '../client'
-
-import {
   PullRequest, BranchReference, PullRequestParticipant
 } from './interfaces'
+
+import {
+  IClient, RequestOptions, PagedResponse
+} from '../client-base'
 
 import EntityModel from './entity'
 
@@ -25,7 +25,7 @@ export default class PullRequestModel extends EntityModel implements PullRequest
   reviewers: PullRequestParticipant[]
   participants: PullRequestParticipant[]
 
-  constructor(client: Client, data?: any) {
+  constructor(client: IClient, data?: any) {
     super(data)
     if (data) {
     }

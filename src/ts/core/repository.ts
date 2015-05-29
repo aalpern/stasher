@@ -3,15 +3,14 @@ import {
 } from './interfaces'
 
 import {
-  Client,
-  RequestOptions,
-  PagedResponse
-} from '../client'
+  IClient, RequestOptions, PagedResponse
+} from '../client-base'
 
+import EntityModel from './entity'
 import ProjectModel from './project'
 import PullRequestModel from './pull-request'
 
-export default class RepositoryModel implements Repository {
+export default class RepositoryModel extends EntityModel implements Repository {
   id: number
   slug: string
   name: string
@@ -22,12 +21,11 @@ export default class RepositoryModel implements Repository {
   project: ProjectModel
   public: boolean
   cloneUrl: string
-  link: Relation
-  links: LinkDictionary
 
-  private client: Client
+  private client: IClient
 
-  constructor(client: Client, data?: any) {
+  constructor(client: IClient, data?: any) {
+    super(data)
     this.client = client
     if (data) {
       this.id = data.id

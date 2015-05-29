@@ -3,10 +3,8 @@ import {
 } from './interfaces'
 
 import {
-  Client,
-  RequestOptions,
-  PagedResponse
-} from '../client'
+  IClient, RequestOptions, PagedResponse
+} from '../client-base'
 
 import RepositoryModel from './repository'
 
@@ -20,9 +18,9 @@ export default class ProjectModel implements Project {
   link: Relation
   links: LinkDictionary
 
-  private client : Client
+  private client : IClient
 
-  constructor(client: Client, data?: any) {
+  constructor(client: IClient, data?: any) {
     this.client = client
     if (data) {
       this.id = data.id
