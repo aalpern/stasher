@@ -1,6 +1,47 @@
 A JavaScript client for Atlassian Stash's REST API, utilizing
 Promises.
 
+### Installation
+
+```
+npm install stasher
+```
+
+### Usage
+
+```javascript
+let stasher = require('stasher')
+
+let client = new stasher.Client({
+  base_url: 'http://dockerhost:32833/stash',
+  auth: {
+    type: stash.AuthType.BASIC,
+    username: 'user',
+    password: 'pass'
+  }
+})
+
+function log(data) {
+  console.log('----------')
+  console.log(data)
+}
+
+client.projects.get()
+  .then(log)
+
+client.projects.get('PROJ')
+  .then((project) => {
+    return project.repositories()
+  })
+  .then(log)
+
+client.repositories.get('PROJ', 'awesome-service')
+  .then((repo) -> {
+    return repo.pull_requests()
+  })
+  .then(log)
+```
+
 ### Status
 
 * [ ] [Core API](https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html)
