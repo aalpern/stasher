@@ -10,6 +10,7 @@ import {
 
 import ProjectModel from './core/project'
 import RepositoryModel from './core/repository'
+import UserModel from './core/user'
 
 export enum AuthType {
   BASIC,
@@ -92,6 +93,25 @@ export class Client implements IClient {
       return this.http_get('api', path)
         .then((data) => {
           return new PagedResponse<RepositoryModel>(RepositoryModel, this, path, data)
+        })
+    }
+  }
+
+  users = {
+    __proto__: this,
+
+    list() {
+      let path = '/users'
+      return this.http_get('api', path)
+        .then((data) => {
+          return new PagedResponse<UserModel>(UserModel, this, path, data)
+        })
+    },
+
+    get(slug: string) {
+      return this.http_get('api', `/users/${slug}`)
+        .then((data) => {
+          return new UserModel(data)
         })
     }
   }

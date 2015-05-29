@@ -35,8 +35,12 @@ export default class CommitModel implements Commit {
   }
 
   changes() {
+    // TODO - need parent entity path. Parent can be a repo or a
+    // pull-request
   }
 
   comments() {
+    // TODO - need parent entity path. Parent can be a repo or a
+    // pull-request
   }
 }

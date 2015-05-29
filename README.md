@@ -71,7 +71,7 @@ client.repositories.get('PROJ', 'awesome-service')
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/participants`
   * [x] Profile
     * [x] `GET /rest/api/1.0/profile/recent/repos`
-  * [ ] Users
-    * [ ] `GET /rest/api/1.0/users`
-    * [ ] `GET /rest/api/1.0/users/{slug}`
+  * [x] Users
+    * [x] `GET /rest/api/1.0/users`
+    * [x] `GET /rest/api/1.0/users/{slug}`
 * [ ] [Build Integration API](https://developer.atlassian.com/static/rest/stash/3.9.2/stash-build-integration-rest.html)
