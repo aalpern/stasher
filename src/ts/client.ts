@@ -24,6 +24,11 @@ export interface Auth {
   password?: string
 }
 
+export interface ProjectListOptions extends RequestOptions {
+  name?: string
+  permission?: string
+}
+
 export class Client implements IClient {
 
   private _base_url: any /* URI */
@@ -58,15 +63,15 @@ export class Client implements IClient {
   projects = {
     __proto__: this,
 
-    list(opt?: RequestOptions) {
+    list(opt?: ProjectListOptions) {
       let path = '/projects'
-      return this.http_get('api', path)
+      return this.http_get('api', path, opt)
         .then((data) => {
           return new PagedResponse<ProjectModel>((c, d) => new ProjectModel(c, d), this, path, data)
         })
     },
 
-    get(key: string, opt?: RequestOptions) {
+    get(key: string) {
       return this.http_get('api', `/projects/${key}`)
         .then((data) => {
           return new ProjectModel(this, data)
@@ -88,9 +93,9 @@ export class Client implements IClient {
   profile = {
     __proto__: this,
 
-    recent_repos() {
+    recent_repos(opt?: RequestOptions) {
       let path = '/profile/recent/repos'
-      return this.http_get('api', path)
+      return this.http_get('api', path, opt)
         .then((data) => {
           return new PagedResponse<RepositoryModel>((c, d) => new RepositoryModel(c, d), this, path, data)
         })
@@ -100,9 +105,9 @@ export class Client implements IClient {
   users = {
     __proto__: this,
 
-    list() {
+    list(opt?: RequestOptions) {
       let path = '/users'
-      return this.http_get('api', path)
+      return this.http_get('api', path, opt)
         .then((data) => {
           return new PagedResponse<UserModel>((c, d) => new UserModel(d), this, path, data)
         })
@@ -120,7 +125,7 @@ export class Client implements IClient {
      Internals
      -------------------------------------------------- */
 
-  http_get(api: string, path: string, options?: any) {
+  http_get(api: string, path: string, options?: RequestOptions) {
     return this._request('GET', api, path, options)
   }
 
@@ -133,12 +138,11 @@ export class Client implements IClient {
       .normalizePath()
   }
 
-  _request(method: string, api: string, path: string, options?: any) {
+  _request(method: string, api: string, path: string, options?: RequestOptions) {
     let url = this._url(api, path)
-    console.log(`${method} ${url.toString()}`)
 
-    if (method === 'GET' && options && options.params) {
-      url.setSearch(options.params)
+    if (method === 'GET' && options) {
+      url.setSearch(options)
     }
 
     let headers = {}
@@ -152,6 +156,8 @@ export class Client implements IClient {
     if (this._auth && this._auth.type === AuthType.BASIC) {
       opts.auth = `${this._auth.username}:${this._auth.password}`
     }
+
+    console.log(`${method} ${url.toString()}`)
 
     return new Promise((resolve, reject) => {
       let body = ''

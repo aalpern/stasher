@@ -54,6 +54,8 @@ client.repositories.get('PROJ', 'awesome-service')
 
 Work in progress.
 
+* [ ] Error handling
+* [ ] OAuth
 * [ ] [Core API](https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html)
   * [ ] Projects
     * [x] `GET /rest/api/1.0/projects`
@@ -61,7 +63,7 @@ Work in progress.
     * [x] `GET /rest/api/1.0/projects/{key}/repos`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/forks`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/related`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/related`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches/default`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/browse`

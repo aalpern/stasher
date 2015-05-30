@@ -17,6 +17,7 @@ export default class CommitModel implements Commit {
   parents: CommitModel[]
 
   private client : IClient
+  private parent: string
 
   constructor(client: IClient, data?: any) {
     this.client = client
@@ -34,13 +35,14 @@ export default class CommitModel implements Commit {
     }
   }
 
+  set_parent(path: string) : CommitModel {
+    this.parent = path
+    return this
+  }
+
   changes() {
-    // TODO - need parent entity path. Parent can be a repo or a
-    // pull-request
   }
 
   comments() {
-    // TODO - need parent entity path. Parent can be a repo or a
-    // pull-request
   }
 }

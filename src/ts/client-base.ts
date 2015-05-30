@@ -6,7 +6,6 @@
 export interface RequestOptions {
   start?: number
   limit?: number
-  params?: Object
 }
 
 export interface IClient {

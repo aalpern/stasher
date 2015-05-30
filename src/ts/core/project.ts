@@ -39,7 +39,7 @@ export default class ProjectModel implements Project {
    */
   repositories(opt?: RequestOptions) {
     let path = `/projects/${this.key}/repos`
-    return this.client.http_get('api', path)
+    return this.client.http_get('api', path, opt)
       .then((data) => {
         return new PagedResponse<RepositoryModel>((c, d) => new RepositoryModel(c, d), this.client, path, data)
       })
@@ -48,9 +48,8 @@ export default class ProjectModel implements Project {
   /**
    * @returns Promise<Repository>
    */
-  repository(slug: string, opt?: RequestOptions) {
-    let path = `/projects/${this.key}/repos/${slug}`
-    return this.client.http_get('api', path)
+  repository(slug: string) {
+    return this.client.http_get('api', `/projects/${this.key}/repos/${slug}`)
       .then((data) => {
         return new RepositoryModel(this.client, data)
       })
