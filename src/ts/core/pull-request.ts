@@ -6,8 +6,18 @@ import {
   IClient, RequestOptions, PagedResponse
 } from '../client-base'
 
-import EntityModel from './entity'
+import EntityModel      from './entity'
 import ParticipantModel from './participant'
+import ChangeModel      from './change'
+import CommitModel      from './commit'
+
+export interface CommitsOptions extends RequestOptions {
+  withCounts?: boolean
+}
+
+export interface ChangesOptions extends RequestOptions {
+  withComments?: boolean
+}
 
 export default class PullRequestModel extends EntityModel implements PullRequest {
   id: number
@@ -28,6 +38,7 @@ export default class PullRequestModel extends EntityModel implements PullRequest
 
   private client : IClient
   private parent : string
+  href: string
 
   constructor(client: IClient, data?: any) {
     super(data)
@@ -59,16 +70,31 @@ export default class PullRequestModel extends EntityModel implements PullRequest
 
   set_parent(path: string) : PullRequestModel {
     this.parent = path
+    this.href = `${this.parent}/pull-requests/${this.id}`
     return this
   }
 
   activities() {
   }
 
-  changes() {
+  changes(opt?: RequestOptions) {
+    let path = `${this.href}/changes`
+    return this.client.http_get('api', path, opt)
+      .then((data) => {
+        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data)
+      })
   }
 
-  commits() {
+  comments() {
+  }
+
+  commits(opt?: CommitsOptions) {
+    let path = `${this.href}/commits`
+    return this.client.http_get('api', path, opt)
+      .then((data) => {
+        return new PagedResponse<CommitModel>((c, d) => new CommitModel(c, d).set_parent(this.href),
+                                              this.client, path, data)
+      })
   }
 
   diff() {

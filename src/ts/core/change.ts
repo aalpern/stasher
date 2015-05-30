@@ -19,7 +19,7 @@ export default class ChangeModel extends EntityModel implements Change {
   srcPath: Path
   srcExecutable: boolean
 
-  constructor(client: IClient, data?: any) {
+  constructor(data?: any) {
     super(data)
     if (data) {
       this.contentId = data.contentId

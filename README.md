@@ -72,15 +72,15 @@ Work in progress.
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/changes`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/changes`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/changes`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/comments`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/files`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/activities`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/changes`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/changes`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/comments`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/commits`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/commits`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/diff`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/participants`
   * [x] Profile

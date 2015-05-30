@@ -3,10 +3,11 @@ import {
 } from './interfaces'
 
 import {
-  IClient
+  IClient, RequestOptions, PagedResponse
 } from '../client-base'
 
-import UserModel from './user'
+import UserModel   from './user'
+import ChangeModel from './change'
 
 export default class CommitModel implements Commit {
   id: string
@@ -18,6 +19,7 @@ export default class CommitModel implements Commit {
 
   private client : IClient
   private parent: string
+  href: string
 
   constructor(client: IClient, data?: any) {
     this.client = client
@@ -37,10 +39,16 @@ export default class CommitModel implements Commit {
 
   set_parent(path: string) : CommitModel {
     this.parent = path
+    this.href = `${this.parent}/commits/${this.id}`
     return this
   }
 
-  changes() {
+  changes(opt?: RequestOptions) {
+    let path = `${this.href}/changes`
+    return this.client.http_get('api', path, opt)
+      .then((data) => {
+        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data)
+      })
   }
 
   comments() {

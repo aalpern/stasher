@@ -117,7 +117,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
     let path = `/projects/${this.project.key}/repos/${this.slug}/changes`
     return this.client.http_get('api', path, opt)
       .then((data) => {
-        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(c, d), this.client, path, data)
+        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data)
       })
   }
 
@@ -156,7 +156,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
     let path = `/projects/${this.project.key}/repos/${this.slug}/pull-requests/${id}`
     return this.client.http_get('api', path)
       .then((data) => {
-        return new PullRequestModel(this.client, data)
+        return new PullRequestModel(this.client, data).set_parent(this.href)
       })
   }
 }
