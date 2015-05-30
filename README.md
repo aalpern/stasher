@@ -4,7 +4,7 @@ Promises.
 ### Installation
 
 ```
-npm install stasher
+npm install [stasher](https://www.npmjs.com/package/stasher)
 ```
 
 The library and its dependencies are compatible with
