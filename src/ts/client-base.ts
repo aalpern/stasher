@@ -13,6 +13,10 @@ export interface IClient {
   http_get(api: string, path: string, opt?: RequestOptions)
 }
 
+export interface ValueConstructorFn<T> {
+  (client: IClient, data: any) : T
+}
+
 export class PagedResponse<T> {
   values: T[]
   size: number
@@ -24,7 +28,7 @@ export class PagedResponse<T> {
   private client: IClient
   private base_path: string
 
-  constructor(c: { new(client: IClient, data: any):T }, client: IClient, base_path: string, data: any) {
+  constructor(c: ValueConstructorFn<T>, client: IClient, base_path: string, data: any) {
     this.client = client
     this.size = data.size
     this.limit = data.limit
@@ -32,7 +36,7 @@ export class PagedResponse<T> {
     this.nextPageStart = data.nextPageStart
     this.isLastPage = data.isLastPage
     if (c) {
-      this.values = data.values.map(v => new c(client, v))
+      this.values = data.values.map(v => c(client, v))
     } else {
       this.values = data.values
     }

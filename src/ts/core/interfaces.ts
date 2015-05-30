@@ -117,7 +117,7 @@ export interface Change extends Entity {
   srcExecutable?: boolean
 }
 
-export interface PullRequestParticipant {
+export interface Participant {
   user: User
   role: string
   approved: boolean
@@ -149,9 +149,9 @@ export interface PullRequest extends Entity {
   fromRef: BranchReference
   toRef: BranchReference
   locked: boolean
-  author: PullRequestParticipant
-  reviewers: PullRequestParticipant[]
-  participants: PullRequestParticipant[]
+  author: Participant
+  reviewers: Participant[]
+  participants: Participant[]
 }
 
 export interface PullRequestActivity {

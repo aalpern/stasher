@@ -16,6 +16,20 @@ export interface ChangesOptions extends RequestOptions {
   until: string
 }
 
+export interface PullRequestOptions extends RequestOptions {
+  /** One of "ALL", "OPEN", "DECLINED", or "MERGED". Defaults to "OPEN". */
+  state?: string
+  /** One of "INCOMING" or "OUTGOING". Defaults to "INCOMING". */
+  direction?: string
+  at?: string
+  /** One of "OLDEST" or "NEWEST". */
+  order?: string
+  /** Defaults to true. */
+  withAttributes: boolean
+  /** Defaults to true. */
+  withProperties: boolean
+}
+
 export default class RepositoryModel extends EntityModel implements Repository {
   id: number
   slug: string
@@ -28,6 +42,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
   public: boolean
   cloneUrl: string
 
+  href: string
   private client: IClient
 
   constructor(client: IClient, data?: any) {
@@ -44,6 +59,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
       this.project = new ProjectModel(client, data.project)
       this.link = data.link
       this.links = data.links
+      this.href = `/projects/${this.project.key}/repos/${this.slug}`
     }
   }
 
@@ -75,7 +91,7 @@ export default class RepositoryModel extends EntityModel implements Repository {
     return this.client.http_get('api', path, {
       params: params
     }).then((data) => {
-      return new PagedResponse<ChangeModel>(ChangeModel, this.client, path, data)
+      return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(c, d), this.client, path, data)
     })
   }
 
@@ -93,14 +109,29 @@ export default class RepositoryModel extends EntityModel implements Repository {
   }
 
   files(opt?: RequestOptions) {
-  }
-
-  pull_requests(opt?: RequestOptions) {
-    let path = `/projects/${this.project.key}/repos/${this.slug}/pull-requests`
+    let path = `/projects/${this.project.key}/repos/${this.slug}/files`
     return this.client.http_get('api', path)
       .then((data) => {
-        return new PagedResponse<PullRequestModel>(PullRequestModel, this.client, path, data)
+        return new DefaultPagedResponse(this.client, path, data)
       })
+  }
+
+  pull_requests(opt?: PullRequestOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/pull-requests`
+    let params = {
+      state: opt ? opt.state : undefined,
+      direction: opt ? opt.direction : undefined,
+      at: opt ? opt.at : undefined,
+      order: opt ? opt.order : undefined,
+      withAttributes: opt ? opt.withAttributes : undefined,
+      withProperties: opt ? opt.withProperties : undefined
+    }
+    return this.client.http_get('api', path, {
+      params: params
+    }).then((data) => {
+      return new PagedResponse<PullRequestModel>((c, d) => new PullRequestModel(c, d).set_parent(this.href),
+                                                 this.client, path, data)
+    })
   }
 
   pull_request(id: string, opt?: RequestOptions) {

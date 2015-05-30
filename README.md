@@ -7,7 +7,15 @@ Promises.
 npm install stasher
 ```
 
+The library and its dependencies are compatible with
+[browserify](http://browserify.org/).
+
 ### Usage
+
+All API methods return [Promises/A+](https://promisesaplus.com/)
+compatible promises via
+[Bluebird](https://github.com/petkaantonov/bluebird).
+
 
 ```javascript
 let stasher = require('stasher')
@@ -42,7 +50,9 @@ client.repositories.get('PROJ', 'awesome-service')
   .then(log)
 ```
 
-### Status
+### Current Status
+
+Work in progress.
 
 * [ ] [Core API](https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html)
   * [ ] Projects
@@ -60,7 +70,7 @@ client.repositories.get('PROJ', 'awesome-service')
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/changes`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}/comments`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/files`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/files`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/pull-requests/{id}/activities`

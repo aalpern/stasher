@@ -62,7 +62,7 @@ export class Client implements IClient {
       let path = '/projects'
       return this.http_get('api', path)
         .then((data) => {
-          return new PagedResponse<ProjectModel>(ProjectModel, this, path, data)
+          return new PagedResponse<ProjectModel>((c, d) => new ProjectModel(c, d), this, path, data)
         })
     },
 
@@ -92,7 +92,7 @@ export class Client implements IClient {
       let path = '/profile/recent/repos'
       return this.http_get('api', path)
         .then((data) => {
-          return new PagedResponse<RepositoryModel>(RepositoryModel, this, path, data)
+          return new PagedResponse<RepositoryModel>((c, d) => new RepositoryModel(c, d), this, path, data)
         })
     }
   }
@@ -104,7 +104,7 @@ export class Client implements IClient {
       let path = '/users'
       return this.http_get('api', path)
         .then((data) => {
-          return new PagedResponse<UserModel>(UserModel, this, path, data)
+          return new PagedResponse<UserModel>((c, d) => new UserModel(d), this, path, data)
         })
     },
 

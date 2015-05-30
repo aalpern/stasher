@@ -41,7 +41,7 @@ export default class ProjectModel implements Project {
     let path = `/projects/${this.key}/repos`
     return this.client.http_get('api', path)
       .then((data) => {
-        return new PagedResponse<RepositoryModel>(RepositoryModel, this.client, path, data)
+        return new PagedResponse<RepositoryModel>((c, d) => new RepositoryModel(c, d), this.client, path, data)
       })
   }
 
