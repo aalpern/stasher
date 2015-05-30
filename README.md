@@ -3,8 +3,10 @@ Promises.
 
 ### Installation
 
+From [npm](https://www.npmjs.com/package/stasher):
+
 ```
-npm install [stasher](https://www.npmjs.com/package/stasher)
+npm install stasher
 ```
 
 The library and its dependencies are compatible with
