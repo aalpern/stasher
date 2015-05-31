@@ -1,8 +1,15 @@
 {
   "name": "stasher",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A REST API client for Atlassian Stash.",
   "main": "dist/stasher.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aalpern/stasher"
+  },
+  "bugs": {
+    "url": "https://github.com/aalpern/stasher/issues"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
