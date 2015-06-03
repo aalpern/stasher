@@ -26,7 +26,7 @@ var _coreUser2 = _interopRequireDefault(_coreUser);
 
 var URI = require('URIjs');
 var Promise = require('bluebird');
-var hyperquest = require('hyperquest');
+var request = require('superagent');
 var AuthType;
 exports.AuthType = AuthType;
 (function (AuthType) {
@@ -140,35 +140,20 @@ var Client = (function () {
         key: '_request',
         value: function _request(method, api, path, options) {
             var url = this._url(api, path);
+            var req = request(method, url.toString());
             if (method === 'GET' && options) {
-                url.setSearch(options);
+                req.query(options);
             }
-            var headers = {};
-            var opts = {
-                method: method,
-                uri: url.toString(),
-                headers: headers
-            };
             if (this._auth && this._auth.type === AuthType.BASIC) {
-                opts.auth = '' + this._auth.username + ':' + this._auth.password;
+                req.auth(this._auth.username, this._auth.password);
             }
             return new Promise(function (resolve, reject) {
-                var body = '';
-                var req = hyperquest(opts);
-                req.on('data', function (buffer) {
-                    body += buffer.toString();
-                }).on('end', function () {
-                    try {
-                        var data = JSON.parse(body);
-                        resolve(data);
-                    } catch (e) {
-                        reject({
-                            exception: e,
-                            body: body
-                        });
+                req.end(function (err, response) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(response.body);
                     }
-                }).on('error', function (e) {
-                    reject(e);
                 });
             });
         }
