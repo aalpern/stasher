@@ -227,7 +227,6 @@ var Client = (function () {
             if (this._auth && this._auth.type === AuthType.BASIC) {
                 opts.auth = '' + this._auth.username + ':' + this._auth.password;
             }
-            console.log('' + method + ' ' + url.toString());
             return new Promise(function (resolve, reject) {
                 var body = '';
                 var req = hyperquest(opts);

@@ -157,8 +157,6 @@ export class Client implements IClient {
       opts.auth = `${this._auth.username}:${this._auth.password}`
     }
 
-    console.log(`${method} ${url.toString()}`)
-
     return new Promise((resolve, reject) => {
       let body = ''
       let req = hyperquest(opts)

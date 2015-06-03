@@ -63,7 +63,7 @@ module.exports = function(grunt) {
       bundle: {
         files: {
           '_build/stasher-bundle.js' : [
-            '_build/es5/**/*.js'
+            '_build/es5/js/client.js'
           ]
         }
       }
