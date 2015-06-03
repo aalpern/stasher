@@ -1,8 +1,8 @@
 declare var require
 
-const URI        = require('URIjs')
-const Promise    = require('bluebird')
-const hyperquest = require('hyperquest')
+const URI     = require('URIjs')
+const Promise = require('bluebird')
+const request = require('superagent')
 
 import {
   IClient, RequestOptions, PagedResponse
@@ -140,44 +140,24 @@ export class Client implements IClient {
 
   _request(method: string, api: string, path: string, options?: RequestOptions) {
     let url = this._url(api, path)
+    let req = request(method, url.toString())
 
     if (method === 'GET' && options) {
-      url.setSearch(options)
-    }
-
-    let headers = {}
-
-    let opts : any = {
-      method: method,
-      uri: url.toString(),
-      headers: headers
+      req.query(options)
     }
 
     if (this._auth && this._auth.type === AuthType.BASIC) {
-      opts.auth = `${this._auth.username}:${this._auth.password}`
+      req.auth(this._auth.username, this._auth.password)
     }
 
     return new Promise((resolve, reject) => {
-      let body = ''
-      let req = hyperquest(opts)
-      req
-        .on('data', (buffer) => {
-          body += buffer.toString()
-        })
-        .on('end', () => {
-          try {
-            let data= JSON.parse(body)
-            resolve(data)
-          } catch (e) {
-            reject({
-              exception: e,
-              body: body
-            })
-          }
-        })
-        .on('error', (e) => {
-          reject(e)
-        })
+      req.end((err, response) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(response.body)
+        }
+      })
     })
   }
 }
