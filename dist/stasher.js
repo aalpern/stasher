@@ -2,22 +2,24 @@
 /* -----------------------------------------------------------------------------
    Core Client types
    ----------------------------------------------------------------------------- */
-"use strict";
+'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
     value: true
 });
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 var PagedResponse = (function () {
     function PagedResponse(c, client, base_path, data) {
+        var field = arguments[4] === undefined ? 'values' : arguments[4];
+
         _classCallCheck(this, PagedResponse);
 
         this.client = client;
@@ -26,17 +28,18 @@ var PagedResponse = (function () {
         this.start = data.start;
         this.nextPageStart = data.nextPageStart;
         this.isLastPage = data.isLastPage;
+        this.field = field;
         if (c) {
-            this.values = data.values.map(function (v) {
+            this.values = data[field].map(function (v) {
                 return c(client, v);
             });
         } else {
-            this.values = data.values;
+            this.values = data[field];
         }
     }
 
     _createClass(PagedResponse, [{
-        key: "nextPage",
+        key: 'nextPage',
 
         /**
          * Get the next page of results.
@@ -52,10 +55,10 @@ var PagedResponse = (function () {
 exports.PagedResponse = PagedResponse;
 
 var DefaultPagedResponse = (function (_PagedResponse) {
-    function DefaultPagedResponse(client, base_path, data) {
+    function DefaultPagedResponse(client, base_path, data, field) {
         _classCallCheck(this, DefaultPagedResponse);
 
-        _get(Object.getPrototypeOf(DefaultPagedResponse.prototype), "constructor", this).call(this, null, client, base_path, data);
+        _get(Object.getPrototypeOf(DefaultPagedResponse.prototype), 'constructor', this).call(this, null, client, base_path, data, field);
     }
 
     _inherits(DefaultPagedResponse, _PagedResponse);
@@ -713,6 +716,8 @@ var _commit = require('./commit');
 
 var _commit2 = _interopRequireDefault(_commit);
 
+var URI = require('URIjs');
+
 var RepositoryModel = (function (_EntityModel) {
     function RepositoryModel(client, data) {
         _classCallCheck(this, RepositoryModel);
@@ -805,25 +810,39 @@ var RepositoryModel = (function (_EntityModel) {
             });
         }
     }, {
+        key: 'browse',
+        value: function browse(opt) {
+            var _this6 = this;
+
+            var path = new URI('/projects/' + this.project.key + '/repos/' + this.slug + '/browse');
+            if (opt && opt.path) {
+                path.segment(opt.path).normalizePath();
+                opt.path = undefined; /* prevent it from being added to query string too */
+            }
+            return this.client.http_get('api', path.toString(), opt).then(function (data) {
+                return new _clientBase.DefaultPagedResponse(_this6.client, path, data, 'lines');
+            });
+        }
+    }, {
         key: 'pull_requests',
         value: function pull_requests(opt) {
-            var _this6 = this;
+            var _this7 = this;
 
             var path = '/projects/' + this.project.key + '/repos/' + this.slug + '/pull-requests';
             return this.client.http_get('api', path, opt).then(function (data) {
                 return new _clientBase.PagedResponse(function (c, d) {
-                    return new _pullRequest2['default'](c, d).set_parent(_this6.href);
-                }, _this6.client, path, data);
+                    return new _pullRequest2['default'](c, d).set_parent(_this7.href);
+                }, _this7.client, path, data);
             });
         }
     }, {
         key: 'pull_request',
         value: function pull_request(id) {
-            var _this7 = this;
+            var _this8 = this;
 
             var path = '/projects/' + this.project.key + '/repos/' + this.slug + '/pull-requests/' + id;
             return this.client.http_get('api', path).then(function (data) {
-                return new _pullRequest2['default'](_this7.client, data).set_parent(_this7.href);
+                return new _pullRequest2['default'](_this8.client, data).set_parent(_this8.href);
             });
         }
     }]);
@@ -836,7 +855,7 @@ module.exports = exports['default'];
 
 
 
-},{"../client-base":1,"./change":3,"./commit":4,"./entity":5,"./project":9,"./pull-request":10}],12:[function(require,module,exports){
+},{"../client-base":1,"./change":3,"./commit":4,"./entity":5,"./project":9,"./pull-request":10,"URIjs":undefined}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
