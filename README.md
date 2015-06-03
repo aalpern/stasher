@@ -68,7 +68,8 @@ Work in progress.
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/related`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches/default`
-    * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/browse`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/browse`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/browse/{path}`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/changes`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/commits/{id}`

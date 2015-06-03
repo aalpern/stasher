@@ -12,6 +12,9 @@ import PullRequestModel from './pull-request'
 import ChangeModel      from './change'
 import CommitModel      from './commit'
 
+declare var require
+const URI = require('URIjs')
+
 export interface ChangesOptions extends RequestOptions {
   since?: string
   until: string
@@ -57,6 +60,17 @@ export interface PullRequestOptions extends RequestOptions {
   withAttributes: boolean
   /** Defaults to true. */
   withProperties: boolean
+}
+
+export interface BrowseOptions extends RequestOptions {
+  /** Relative path within the repository to retrieve content for. */
+  path?: string
+  /** Changeset ID or ref to retrieve */
+  at?: string
+  /** If true, return type only instead of content. Defaults to false. */
+  type?: boolean
+  blame?: string
+  noContent?: string
 }
 
 export default class RepositoryModel extends EntityModel implements Repository {
@@ -140,6 +154,18 @@ export default class RepositoryModel extends EntityModel implements Repository {
     return this.client.http_get('api', path, opt)
       .then((data) => {
         return new DefaultPagedResponse(this.client, path, data)
+      })
+  }
+
+  browse(opt?: BrowseOptions) {
+    let path = new URI(`/projects/${this.project.key}/repos/${this.slug}/browse`)
+    if (opt && opt.path) {
+      path.segment(opt.path).normalizePath()
+      opt.path = undefined /* prevent it from being added to query string too */
+    }
+    return this.client.http_get('api', path.toString(), opt)
+      .then((data) => {
+        return new DefaultPagedResponse(this.client, path, data, 'lines')
       })
   }
 

@@ -26,18 +26,20 @@ export class PagedResponse<T> {
 
   private client: IClient
   private base_path: string
+  private field: string
 
-  constructor(c: ValueConstructorFn<T>, client: IClient, base_path: string, data: any) {
+  constructor(c: ValueConstructorFn<T>, client: IClient, base_path: string, data: any, field: string = 'values') {
     this.client = client
     this.size = data.size
     this.limit = data.limit
     this.start = data.start
     this.nextPageStart = data.nextPageStart
     this.isLastPage = data.isLastPage
+    this.field = field
     if (c) {
-      this.values = data.values.map(v => c(client, v))
+      this.values = data[field].map(v => c(client, v))
     } else {
-      this.values = data.values
+      this.values = data[field]
     }
   }
 
@@ -52,7 +54,7 @@ export class PagedResponse<T> {
 }
 
 export class DefaultPagedResponse extends PagedResponse<any> {
-  constructor(client: IClient, base_path: string, data: any) {
-    super(null, client, base_path, data)
+  constructor(client: IClient, base_path: string, data: any, field?: string) {
+    super(null, client, base_path, data, field)
   }
 }
