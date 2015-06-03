@@ -1,6 +1,6 @@
 {
   "name": "stasher",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A REST API client for Atlassian Stash.",
   "main": "dist/node/index.js",
   "repository": {
@@ -26,8 +26,8 @@
   "dependencies": {
     "URIjs": "^1.15.1",
     "bluebird": "^2.9.26",
-    "hyperquest": "^1.2.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "superagent": "^1.2.0"
   },
   "devDependencies": {
     "babelify": "^6.1.2",
