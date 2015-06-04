@@ -27,6 +27,13 @@ export interface ProjectListOptions extends RequestOptions {
   permission?: string
 }
 
+export interface RepositorySearchOptions extends RequestOptions {
+  name?: string
+  projectname?: string
+  permission?: string
+  visibility?: string
+}
+
 export class Client implements IClient {
 
   private _base_url: any /* URI */
@@ -84,6 +91,21 @@ export class Client implements IClient {
       return this.http_get('api', `/projects/${project}/repos/${repo}`)
         .then((data) => {
           return new RepositoryModel(this, data)
+        })
+    },
+
+    /**
+     * @see https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html#idp3360144
+     */
+    search(opt?: string|RepositorySearchOptions) {
+      if (typeof opt === 'string') {
+        opt = {
+          name: <string>opt
+        }
+      }
+      return this.http_get('api', '/repos', opt)
+        .then((data) => {
+          return new PagedResponse<RepositoryModel>((c, d) => new RepositoryModel(c, d), this, '/repos', data)
         })
     }
   }

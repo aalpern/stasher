@@ -60,6 +60,7 @@ Work in progress.
 * [ ] OAuth
 * [ ] [Core API](https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html)
   * [ ] Projects
+    * [x] `GET /rest/api/1.0/repos`
     * [x] `GET /rest/api/1.0/projects`
     * [x] `GET /rest/api/1.0/projects/{key}`
     * [x] `GET /rest/api/1.0/projects/{key}/repos`
