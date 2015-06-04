@@ -1,4 +1,8 @@
 import {
+  URI
+} from '../dependencies'
+
+import {
   Repository, Relation, LinkDictionary
 } from './interfaces'
 
@@ -12,8 +16,6 @@ import PullRequestModel from './pull-request'
 import ChangeModel      from './change'
 import CommitModel      from './commit'
 
-declare var require
-const URI = require('URIjs')
 
 export interface ChangesOptions extends RequestOptions {
   since?: string
@@ -53,6 +55,7 @@ export interface PullRequestOptions extends RequestOptions {
   state?: string
   /** One of "INCOMING" or "OUTGOING". Defaults to "INCOMING". */
   direction?: string
+  /** A branch ID to find pull requests to or from. */
   at?: string
   /** One of "OLDEST" or "NEWEST". */
   order?: string

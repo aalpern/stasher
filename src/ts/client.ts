@@ -1,8 +1,6 @@
-declare var require
-
-const URI     = require('URIjs')
-const Promise = require('bluebird')
-const request = require('superagent')
+import {
+  URI, Promise, request
+} from './dependencies'
 
 import {
   IClient, RequestOptions, PagedResponse
