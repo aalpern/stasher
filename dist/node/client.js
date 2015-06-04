@@ -10,6 +10,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+var _dependencies = require('./dependencies');
+
 var _clientBase = require('./client-base');
 
 var _coreProject = require('./core/project');
@@ -24,9 +26,6 @@ var _coreUser = require('./core/user');
 
 var _coreUser2 = _interopRequireDefault(_coreUser);
 
-var URI = require('URIjs');
-var Promise = require('bluebird');
-var request = require('superagent');
 var AuthType;
 exports.AuthType = AuthType;
 (function (AuthType) {
@@ -71,31 +70,48 @@ var Client = (function () {
                 return this.http_get('api', '/projects/' + project + '/repos/' + repo).then(function (data) {
                     return new _coreRepository2['default'](_this3, data);
                 });
+            },
+            /**
+             * @see https://developer.atlassian.com/static/rest/stash/3.9.2/stash-rest.html#idp3360144
+             */
+            search: function search(opt) {
+                var _this4 = this;
+
+                if (typeof opt === 'string') {
+                    opt = {
+                        name: opt
+                    };
+                }
+                return this.http_get('api', '/repos', opt).then(function (data) {
+                    return new _clientBase.PagedResponse(function (c, d) {
+                        return new _coreRepository2['default'](c, d);
+                    }, _this4, '/repos', data);
+                });
             }
         };
         this.profile = {
             __proto__: this,
             recent_repos: function recent_repos(opt) {
-                var _this4 = this;
+                var _this5 = this;
 
                 var path = '/profile/recent/repos';
                 return this.http_get('api', path, opt).then(function (data) {
                     return new _clientBase.PagedResponse(function (c, d) {
                         return new _coreRepository2['default'](c, d);
-                    }, _this4, path, data);
+                    }, _this5, path, data);
                 });
             }
         };
         this.users = {
             __proto__: this,
             list: function list(opt) {
-                var _this5 = this;
+                var _this6 = this;
 
                 var path = '/users';
                 return this.http_get('api', path, opt).then(function (data) {
                     return new _clientBase.PagedResponse(function (c, d) {
                         return new _coreUser2['default'](d);
-                    }, _this5, path, data);
+                    }, _this6, path, data);
                 });
             },
             get: function get(slug) {
@@ -105,12 +121,12 @@ var Client = (function () {
             }
         };
         if (data && typeof data === 'string') {
-            this._base_url = new URI(data);
-        } else if (data && data instanceof URI) {
+            this._base_url = new _dependencies.URI(data);
+        } else if (data && data instanceof _dependencies.URI) {
             this._base_url = data;
         } else if (data) {
             if (data.base_url) {
-                this._base_url = new URI(data.base_url);
+                this._base_url = new _dependencies.URI(data.base_url);
             }
             this._auth = data.auth;
             this.version = data.version || this.version;
@@ -140,14 +156,14 @@ var Client = (function () {
         key: '_request',
         value: function _request(method, api, path, options) {
             var url = this._url(api, path);
-            var req = request(method, url.toString());
+            var req = (0, _dependencies.request)(method, url.toString());
             if (method === 'GET' && options) {
                 req.query(options);
             }
             if (this._auth && this._auth.type === AuthType.BASIC) {
                 req.auth(this._auth.username, this._auth.password);
             }
-            return new Promise(function (resolve, reject) {
+            return new _dependencies.Promise(function (resolve, reject) {
                 req.end(function (err, response) {
                     if (err) {
                         reject(err);

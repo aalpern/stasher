@@ -14,6 +14,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
+var _dependencies = require('../dependencies');
+
 var _clientBase = require('../client-base');
 
 var _entity = require('./entity');
@@ -35,8 +37,6 @@ var _change2 = _interopRequireDefault(_change);
 var _commit = require('./commit');
 
 var _commit2 = _interopRequireDefault(_commit);
-
-var URI = require('URIjs');
 
 var RepositoryModel = (function (_EntityModel) {
     function RepositoryModel(client, data) {
@@ -134,7 +134,7 @@ var RepositoryModel = (function (_EntityModel) {
         value: function browse(opt) {
             var _this6 = this;
 
-            var path = new URI('/projects/' + this.project.key + '/repos/' + this.slug + '/browse');
+            var path = new _dependencies.URI('/projects/' + this.project.key + '/repos/' + this.slug + '/browse');
             if (opt && opt.path) {
                 path.segment(opt.path).normalizePath();
                 opt.path = undefined; /* prevent it from being added to query string too */
