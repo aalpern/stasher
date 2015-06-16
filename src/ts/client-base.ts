@@ -27,17 +27,20 @@ export class PagedResponse<T> {
   private client: IClient
   private base_path: string
   private field: string
+  private ctor: ValueConstructorFn<T>
 
-  constructor(c: ValueConstructorFn<T>, client: IClient, base_path: string, data: any, field: string = 'values') {
+  constructor(ctor: ValueConstructorFn<T>, client: IClient, base_path: string, data: any, field: string = 'values') {
+    this.ctor = ctor
     this.client = client
+    this.base_path = base_path
     this.size = data.size
     this.limit = data.limit
     this.start = data.start
     this.nextPageStart = data.nextPageStart
     this.isLastPage = data.isLastPage
     this.field = field
-    if (c) {
-      this.values = data[field].map(v => c(client, v))
+    if (ctor) {
+      this.values = data[field].map(v => ctor(client, v))
     } else {
       this.values = data[field]
     }
@@ -49,7 +52,17 @@ export class PagedResponse<T> {
    * @return Promise<PagedResponse<T>>
    */
   nextPage() {
-    // TODO
+    if (this.isLastPage) {
+      throw new RangeError('No more pages.')
+    }
+    // TODO: the 'api' parameter needs to be a member too, has to
+    // bubble up to everywhere a PagedResponse is constructed
+    return this.client.http_get('api', this.base_path, {
+      limit: this.limit,
+      start: this.nextPageStart
+    }).then(data => {
+      return new PagedResponse<T>(this.ctor, this.client, this.base_path, data)
+    })
   }
 }
 
