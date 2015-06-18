@@ -15,6 +15,7 @@ import ProjectModel     from './project'
 import PullRequestModel from './pull-request'
 import ChangeModel      from './change'
 import CommitModel      from './commit'
+import TagModel         from './tag'
 
 
 export interface ChangesOptions extends RequestOptions {
@@ -74,6 +75,13 @@ export interface BrowseOptions extends RequestOptions {
   type?: boolean
   blame?: string
   noContent?: string
+}
+
+export interface TagOptions extends RequestOptions {
+  /* String to match tag names on */
+  filterText?: string
+  /** One of 'ALPHABETICAL' or 'MODIFICATION' */
+  orderBy?: string
 }
 
 export default class RepositoryModel extends EntityModel implements Repository {
@@ -186,6 +194,15 @@ export default class RepositoryModel extends EntityModel implements Repository {
     return this.client.http_get('api', path)
       .then((data) => {
         return new PullRequestModel(this.client, data).set_parent(this.href)
+      })
+  }
+
+  tags(opt?: TagOptions) {
+    let path = `/projects/${this.project.key}/repos/${this.slug}/tags`
+    return this.client.http_get('api', path, opt)
+      .then((data) => {
+        return new PagedResponse<TagModel>((c, d) => new TagModel(d),
+                                           this.client, path, data)
       })
   }
 }

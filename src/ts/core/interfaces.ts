@@ -117,6 +117,14 @@ export interface Change extends Entity {
   srcExecutable?: boolean
 }
 
+export interface Tag {
+  id: string
+  displayId: string
+  latestChangeset: string
+  latestCommit: string
+  hash: string
+}
+
 export interface Participant {
   user: User
   role: string

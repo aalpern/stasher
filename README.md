@@ -65,6 +65,7 @@ Work in progress.
     * [x] `GET /rest/api/1.0/projects/{key}`
     * [x] `GET /rest/api/1.0/projects/{key}/repos`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}`
+    * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/tags`
     * [ ] `GET /rest/api/1.0/projects/{key}/repos/{repo}/forks`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/related`
     * [x] `GET /rest/api/1.0/projects/{key}/repos/{repo}/branches`
