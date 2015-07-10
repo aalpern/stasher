@@ -1,3 +1,6 @@
+import {
+  extend
+} from './dependencies'
 
 /* -----------------------------------------------------------------------------
    Core Client types
@@ -23,13 +26,16 @@ export class PagedResponse<T> {
   start: number
   nextPageStart: number
   isLastPage: boolean
+  opt: RequestOptions
 
   private client: IClient
   private base_path: string
   private field: string
   private ctor: ValueConstructorFn<T>
 
-  constructor(ctor: ValueConstructorFn<T>, client: IClient, base_path: string, data: any, field: string = 'values') {
+  constructor(ctor: ValueConstructorFn<T>, client: IClient, base_path: string, data: any,
+              field: string = 'values',
+              opt: RequestOptions = {}) {
     this.ctor = ctor
     this.client = client
     this.base_path = base_path
@@ -38,7 +44,8 @@ export class PagedResponse<T> {
     this.start = data.start
     this.nextPageStart = data.nextPageStart
     this.isLastPage = data.isLastPage
-    this.field = field
+    this.field = field || 'values'
+    this.opt = opt
     if (ctor) {
       this.values = data[field].map(v => ctor(client, v))
     } else {
@@ -57,17 +64,17 @@ export class PagedResponse<T> {
     }
     // TODO: the 'api' parameter needs to be a member too, has to
     // bubble up to everywhere a PagedResponse is constructed
-    return this.client.http_get('api', this.base_path, {
+    return this.client.http_get('api', this.base_path, extend(this.opt, {
       limit: this.limit,
       start: this.nextPageStart
-    }).then(data => {
-      return new PagedResponse<T>(this.ctor, this.client, this.base_path, data)
+    })).then(data => {
+      return new PagedResponse<T>(this.ctor, this.client, this.base_path, data, this.field, this.opt)
     })
   }
 }
 
 export class DefaultPagedResponse extends PagedResponse<any> {
-  constructor(client: IClient, base_path: string, data: any, field?: string) {
-    super(null, client, base_path, data, field)
+  constructor(client: IClient, base_path: string, data: any, field?: string, opt?: RequestOptions) {
+    super(null, client, base_path, data, field, opt)
   }
 }

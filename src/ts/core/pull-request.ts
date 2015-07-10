@@ -81,7 +81,8 @@ export default class PullRequestModel extends EntityModel implements PullRequest
     let path = `${this.href}/changes`
     return this.client.http_get('api', path, opt)
       .then((data) => {
-        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data)
+        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data,
+                                              undefined, opt)
       })
   }
 
@@ -93,7 +94,8 @@ export default class PullRequestModel extends EntityModel implements PullRequest
     return this.client.http_get('api', path, opt)
       .then((data) => {
         return new PagedResponse<CommitModel>((c, d) => new CommitModel(c, d).set_parent(this.href),
-                                              this.client, path, data)
+                                              this.client, path, data,
+                                              undefined, opt)
       })
   }
 

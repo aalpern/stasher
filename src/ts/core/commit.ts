@@ -47,7 +47,8 @@ export default class CommitModel implements Commit {
     let path = `${this.href}/changes`
     return this.client.http_get('api', path, opt)
       .then((data) => {
-        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data)
+        return new PagedResponse<ChangeModel>((c, d) => new ChangeModel(d), this.client, path, data,
+                                              undefined, opt)
       })
   }
 
