@@ -17,7 +17,8 @@ module.exports = function(grunt) {
           target: 'es6',
           comments: true,
           declaration: true,
-          sourceMap: true
+          sourceMap: true,
+          additionalFlags: '--moduleResolution node'
         }
       }
     },
