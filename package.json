@@ -1,8 +1,8 @@
 {
   "name": "stasher",
-  "version": "0.3.0",
+  "version": "0.3.5",
   "description": "A REST API client for Atlassian Stash.",
-  "main": "dist/node/index.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/aalpern/stasher"
@@ -40,6 +40,7 @@
     "grunt-contrib-uglify": "^0.9.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-release": "^0.12.0",
-    "grunt-ts-1.5": "^4.0.1"
+    "grunt-ts": "^4.2.0",
+    "typescript": "^1.6.2"
   }
 }
