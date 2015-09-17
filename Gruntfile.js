@@ -42,7 +42,8 @@ module.exports = function(grunt) {
     copy: {
       dist: {
         files: [
-          { expand: true, cwd: '_build/es5', src: '**/*.js', dest: 'dist/node' }
+          { expand: true, cwd: '_build/es5', src: '**/*.js', dest: 'dist/' },
+          { expand: true, cwd: '_build/es6', src: '**/*.d.ts', dest: 'dist/' }
         ]
       }
     },
