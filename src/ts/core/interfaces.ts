@@ -179,10 +179,10 @@ export interface PullRequestActivity {
 }
 
 export interface BuildStatus {
-  state: string,
+  state: string
   key: string
   name: string
   url: string
-  description: string,
+  description: string
   dateAdded: number
 }
