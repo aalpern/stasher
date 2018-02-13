@@ -10,6 +10,7 @@ import EntityModel      from './entity'
 import ParticipantModel from './participant'
 import ChangeModel      from './change'
 import CommitModel      from './commit'
+import BuildStatusModel from "./build-status";
 
 export interface CommitsOptions extends RequestOptions {
   withCounts?: boolean
@@ -100,5 +101,17 @@ export default class PullRequestModel extends EntityModel implements PullRequest
   }
 
   diff() {
+  }
+
+  buildStatus(){
+      return this.client.http_get('build-status', `/commits/${this.fromRef.latestChangeset}`)
+        .then((data) => {
+            return new PagedResponse<BuildStatusModel>((c, d) => new BuildStatusModel(c, d),
+                this.client,
+                'commits',
+                data,
+                'values'
+            )
+        })
   }
 }

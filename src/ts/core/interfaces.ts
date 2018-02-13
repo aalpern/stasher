@@ -140,7 +140,7 @@ export interface PullRequestAttributes {
 export interface BranchReference {
   id: string
   displayId: string
-  latestChangeSet: string
+  latestChangeset: string
   repository: Repository
 }
 
@@ -176,4 +176,13 @@ export interface PullRequestActivity {
   // previousToHash?
   // added?
   // removed?
+}
+
+export interface BuildStatus {
+  state: string
+  key: string
+  name: string
+  url: string
+  description: string
+  dateAdded: number
 }
